@@ -12,7 +12,7 @@ import com.desarrollo.SpringBootWebCrud.entity.User;
 public interface UserRepository extends CrudRepository<User, Long> {
 
 	//public Set<User> findByUsername(String username);
-	/*
-	public Optional findByUsername(String username);
-	public Optional findByIdAndPassword(Long id, String password);*/
+	
+	public Optional<User> findByUsername(String username);
+	//public Optional findByIdAndPassword(Long id, String password);*/
 }
