@@ -1,7 +1,12 @@
-<form class="form" role="form" autocomplete="off" th:object="${userForm}" th:action="@{/userForm}" method="post">
+<form class="form" role="form" autocomplete="off" th:object="${userForm}" th:action="${editMode} ? @{/editUser} : @{/userForm}" method="post">
+	
+	<!--Es necesario para poder pasar la validacion del Model-->
+	<input class="form-control" type=hidden th:field="${userForm.id}"  th:if="${editMode}">
+	<input class="form-control" type=hidden th:field="${userForm.password}"  th:if="${editMode}">
+	
+	
 	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">First
-			name</label>
+		<label class="col-lg-3 col-form-label form-control-label">First name</label>
 		<div class="col-lg-9">
 			<input class="form-control" type="text" th:field="${userForm.firstName}">
 			<div class="alert-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Name Error</div>
@@ -9,8 +14,7 @@
 		</div>
 	</div>
 	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Last
-			name</label>
+		<label class="col-lg-3 col-form-label form-control-label">Last name</label>
 		<div class="col-lg-9">
 			<input class="form-control" type="text" th:field="${userForm.lastName}">
 			<div class="alert-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">lastName Error</div>
@@ -25,7 +29,7 @@
 		</div>
 	</div>
 	<div class="form-group row">
-		<label class="col-lg-3 col-form-label form-control-label">Username</label>
+		<label class="col-lg-3 col-form-label form-control-label">User name</label>
 		<div class="col-lg-9">
 			<input class="form-control" type="text" th:field="${userForm.username}">
 			<div class="alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username Error</div>
@@ -41,14 +45,14 @@
 			<div class="alert-danger" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">roles Error</div>
 		</div>
 	</div>
-	<div class="form-group row">
+	<div class="form-group row" th:if="${editMode==null or editMode==false}">
 		<label class="col-lg-3 col-form-label form-control-label">Password</label>
 		<div class="col-lg-9">
 			<input class="form-control" type="password" th:field="${userForm.password}">
 			<div class="alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</div>
 		</div>
 	</div>
-	<div class="form-group row">
+	<div class="form-group row" th:if="${editMode==null or editMode==false}">
 		<label class="col-lg-3 col-form-label form-control-label">Confirm</label>
 		<div class="col-lg-9">
 			<input class="form-control" type="password" th:field="${userForm.confirmPassword}">
@@ -57,8 +61,9 @@
 	</div>
 	<div class="form-group row">
 		<div class="col-lg-12 text-center">
-			<input type="reset" class="btn btn-secondary" value="Cancel">
-			<input type="submit" class="btn btn-primary" value="Save Changes">
+			<a class="btn btn-secondary" th:href="@{'/userForm/cancel'}">Cancel</a>
+			<input type="submit" class="btn btn-primary" 
+			value="Save Changes" th:value="${editMode}?'Save User':'Create User'">
 		</div>
 	</div>
 	<div class="alert-danger text-center" th:if="${formError}" th:text="{formError}">Error</div>

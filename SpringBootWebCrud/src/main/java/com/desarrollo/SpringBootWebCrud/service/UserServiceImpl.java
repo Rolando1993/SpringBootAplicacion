@@ -28,6 +28,9 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	private boolean checkPasswordValid(User user) throws Exception {
+		if (user.getConfirmPassword() == null || user.getConfirmPassword().isEmpty()) {
+			throw new Exception("Confirmar Contrasenia es Obligatorio");
+		}
 		if ( !user.getPassword().equals(user.getConfirmPassword())) {
 			throw new Exception("Contrasenia y Confirmar Contrasenia no son iguales");
 		}
@@ -40,5 +43,26 @@ public class UserServiceImpl implements UserService {
 			user = userRepository.save(user);
 		}
 		return user;
+	}
+
+	@Override
+	public User getUserById(Long id) throws Exception {
+		User user = userRepository.findById(id).orElseThrow(() -> new Exception("El Usuario Para Editar no Existe"));
+		return user;
+	}
+
+	@Override
+	public User updateUser(User user) throws Exception {
+		User toUser = getUserById(user.getId());
+		mapUser(user, toUser);
+		return userRepository.save(toUser);
+	}
+	
+	protected void mapUser(User from,User to) {
+		to.setUsername(from.getUsername());
+		to.setFirstName(from.getFirstName());
+		to.setLastName(from.getLastName());
+		to.setEmail(from.getEmail());
+		to.setRoles(from.getRoles());
 	}
 }
