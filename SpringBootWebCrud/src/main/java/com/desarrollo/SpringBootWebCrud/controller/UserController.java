@@ -127,4 +127,14 @@ public class UserController {
 	public String cancelEditUser(ModelMap model) {
 		return "redirect:/userForm";
 	}
+	
+	@GetMapping("/deleteUser/{id}")
+	public String deleteUser(Model model, @PathVariable(name="id") Long id) {
+		try {
+			userService.deleteUser(id);
+		} catch (Exception e) {
+			model.addAttribute("listErrorMesagge", e.getMessage() + "El Usuario no Pudo ser Eliminado.");
+		}
+		return getUserForm(model);
+	}
 }
